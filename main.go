@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/xml"
 	"fmt"
+
 	"github.com/coldruze/scraping/data_types"
 	"github.com/gocolly/colly"
 )
@@ -17,16 +18,16 @@ func main() {
 	)
 
 	c := colly.NewCollector(
-		colly.AllowedDomains("nfuunit.ru"), // Разрешенные домены для парсинга.
+		colly.AllowedDomains("nf.uust.ru"), // Разрешенные домены для парсинга.
 		colly.Async(true),                  // Асинхронный режим работы.
 	)
 
-	url := "https://nfuunit.ru/news" // URL страницы с новостями.
+	url := "https://nf.uust.ru/news" // URL страницы с новостями.
 
 	getData(c, url) // Получение данных о новостях.
 
 	// Проверка наличия данных о новостях.
-	if news == nil {
+	if len(news) == 0 {
 		fmt.Println("Произошла ошибка, либо нет новостей")
 		return
 	}
@@ -38,7 +39,7 @@ func main() {
 func getData(c *colly.Collector, url string) {
 	c.OnHTML(".news-item", func(e *colly.HTMLElement) {
 		temp := data_types.Item{}
-		temp.StoryUrl = "https://nfuunit.ru/" + e.ChildAttr("a", "href") // Получение URL новости.
+		temp.StoryUrl = "https://nf.uust.ru/" + e.ChildAttr("a", "href") // Получение URL новости.
 		temp.Title = e.ChildAttr("a", "title")                           // Получение заголовка новости.
 		news = append(news, temp)                                        // Добавление новости в срез.
 	})
